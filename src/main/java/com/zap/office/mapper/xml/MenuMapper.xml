@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zap.office.mapper.MenuMapper">
+
+    <select id="getMenu" resultType="com.zap.office.entity.Permission">
+        select * from off_permission
+    </select>
+
+    <resultMap id="myMenu" type="com.zap.office.entity.Permission">
+        <id property="id" column="id"></id>
+        <result property="perName" column="per_name"></result>
+        <result property="perPath" column="per_path"></result>
+        <result property="perLevel" column="per_level"></result>
+        <collection property="childern" ofType="com.zap.office.entity.Permission">
+            <id property="id" column="cid"></id>
+            <result property="perName" column="c_name"></result>
+            <result property="perPath" column="c_path"></result>
+            <result property="perLevel" column="c_level"></result>
+        </collection>
+    </resultMap>
+    <select id="getMenuByUser" resultMap="myMenu">
+        SELECT pe.`id`,pe.`per_name`,pe.`per_path`,pe.`per_level`,
+               op.`id` AS cid,op.`per_name` AS c_name,op.`per_path` AS c_path,op.`per_level` AS c_level
+        FROM off_permission pe
+                 LEFT JOIN off_permission op ON op.`pid`=pe.`id`
+        WHERE pe.`id` IN(
+            SELECT pr.`per_id` FROM per_role pr
+            WHERE role_id IN (
+                SELECT ro.`id`
+                FROM off_user us
+                         LEFT JOIN off_role ro ON us.`id` = ro.`id`
+                WHERE us.`id`=#{id}
+            )
+        )
+    </select>
+</mapper>

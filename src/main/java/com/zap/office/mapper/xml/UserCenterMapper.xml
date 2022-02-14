@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zap.office.mapper.UserCenterMapper">
+
+    <resultMap id="userMap" type="com.zap.office.entity.User">
+        <id column="id" property="id"></id>
+        <result column="user_name" property="userName"></result>
+        <result column="pass_word" property="passWord"></result>
+    </resultMap>
+
+
+    <select id="userLogin" resultMap="userMap">
+        select * from off_user where user_name = #{userName}
+    </select>
+
+
+    <resultMap id="EmpUserMap" type="com.zap.office.entity.vo.EmpUserVo">
+        <result column="user_name" property="userName"></result>
+        <result column="pass_word" property="passWord"></result>
+        <result column="emp_phone" property="empPhone"></result>
+    </resultMap>
+
+
+    <select id="getEmpUserVo" resultMap="EmpUserMap">
+        SELECT ou.`user_name`,ou.`pass_word`,oe.`emp_phone` FROM off_employee oe
+                    LEFT JOIN off_user ou ON oe.`user_id`=ou.`id`
+                    WHERE	user_name =#{userName} OR `pass_word`=#{passWord} OR `emp_phone`=#{empPhone}
+    </select>
+
+</mapper>

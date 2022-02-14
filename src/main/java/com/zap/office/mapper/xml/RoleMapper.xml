@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zap.office.mapper.RoleMapper">
+    <select id="getRoleByUserId" resultType="com.zap.office.entity.Permission">
+        SELECT * FROM off_role ro
+        WHERE ro.id IN(
+            SELECT ru.`role_id` FROM role_user ru
+                       LEFT JOIN off_user ou ON ou.`id`=ru.`user_id`
+            WHERE ou.`id`=#{id}
+        )
+    </select>
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zap.office.mapper.SignMapper">
+
+    <update id="updateState">
+        update off_sign set emp_id=#{id},is_sign=1,
+                where id=#{id}
+    </update>
+
+    <resultMap id="mySign" type="com.zap.office.entity.vo.SignEmpVo">
+        <id property="id" column="id"></id>
+        <result property="empName" column="emp_name"></result>
+        <result property="content" column="content"></result>
+        <result property="isSign" column="is_sign"></result>
+        <result property="gmtCreate" column="gmt_create"></result>
+        <result property="gmtModified" column="gmt_modified"></result>
+    </resultMap>
+    <select id="findSignInfo" resultMap="mySign">
+        select id,emp_name,content,is_sign,gmt_create,gmt_modified
+                from off_sign os
+                left join off_employee oe on os.empId=oe.id
+                where os.id=#{id}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zap.office.mapper.ApplyMapper">
+    <resultMap id="myApply" type="com.zap.office.entity.vo.ApplyUserVo">
+        <id property="id" column="id"></id>
+        <result property="empId" column="emp_id"></result>
+        <result property="applyName" column="apply_name"></result>
+        <result property="applyContent" column="apply_content"></result>
+        <result property="isSuccess" column="is_success"></result>
+        <result property="empName" column="emp_name"></result>
+    </resultMap>
+
+    <select id="getApplyInfo" resultMap="myApply">
+        select id,emp_id,apply_name,apply_content,emp_name from
+                        off_employee,off_apply
+                            where id=#{id}
+    </select>
+
+    <!--申批通过为1-->
+    <update id="approvalApply">
+        update off_apply set is_success=1
+                where id=#{id}
+    </update>
+</mapper>
